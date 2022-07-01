@@ -1,41 +1,43 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Scanner;
 
 public class BOJ_Greedy_1946 {
-    private static Scanner sc = new Scanner(System.in);
 
-    public static void main(String args[]) {
-        int T = sc.nextInt();
+    private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+    public static void main(String args[]) throws IOException {
+
+        int T = Integer.parseInt(br.readLine());
 
         while (--T >= 0) {
-            int N = sc.nextInt();
+            int N = Integer.parseInt(br.readLine());
             ArrayList<Person> list = new ArrayList<>();
 
             for (int i = 0; i < N; i++) {
-                int first = sc.nextInt();
-                int second = sc.nextInt();
+                String line = br.readLine();
+                String[] splitLine = line.split(" ");
 
+                int first = Integer.parseInt(splitLine[0]);
+                int second = Integer.parseInt(splitLine[1]);
                 list.add(new Person(first, second));
             }
 
-            // 서류
+            // 서류 순 정렬
             Collections.sort(list, (p1, p2) -> p1.first - p2.first);
-            for (int i=0; i<list.size()-1; i++) {
-                if (list.get(i).second < list.get(i+1).second) {
-                    list.remove(list.get(i+1));
+
+            Person last = list.get(0);
+            int count = 1;
+            for (int i=1; i<list.size(); i++) {
+                if (last.second > list.get(i).second) {
+                    last = list.get(i);
+                    count++;
                 }
             }
 
-            // 면접
-            Collections.sort(list, (p1, p2) -> p1.second - p2.second);
-            for (int i=0; i<list.size()-1; i++) {
-                if (list.get(i).first < list.get(i+1).first) {
-                    list.remove(list.get(i));
-                }
-            }
-            System.out.println(list.size());
-
+            System.out.println(count);
         }
 
     }
@@ -44,6 +46,7 @@ public class BOJ_Greedy_1946 {
 class Person{
     int first;
     int second;
+
     Person(int first, int second) {
         this.first = first;
         this.second = second;
