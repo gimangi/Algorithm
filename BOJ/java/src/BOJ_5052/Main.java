@@ -37,7 +37,7 @@ public class Main {
             String prev = list.get(i);
             String next = list.get(i+1);
 
-            if (next.length() >= prev.length() && next.substring(0, prev.length()).equals(prev))
+            if (next.startsWith(prev))
                     return false;
 
         }
