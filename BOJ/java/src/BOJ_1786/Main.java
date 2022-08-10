@@ -13,11 +13,49 @@ public class Main {
         String T = br.readLine();
         String P = br.readLine();
 
-        ArrayList<Integer> match = KMP(T, P);
+//        ArrayList<Integer> match = KMP(T, P);
+        ArrayList<Integer> match = rabinKarp(T, P);
 
         System.out.println(match.size());
         for (int idx : match)
             System.out.print(idx+" ");
+    }
+
+
+    static ArrayList<Integer> rabinKarp(String parent, String pattern) {
+        ArrayList<Integer> ans = new ArrayList<>();
+
+        int parentLen = parent.length();
+        int patternLen = pattern.length();
+
+        int patternHash = 0;
+        int curHash = 0;
+        int power = 1;
+
+        for (int i=0; i<=parentLen-patternLen; i++) {
+            if (i == 0) {
+                for (int j=patternLen-1; j>=0; j--) {
+                    patternHash += pattern.charAt(j) * power;
+                    curHash += parent.charAt(j) * power;
+                    if (j > 0) power *= 3;
+                }
+            } else {
+                curHash = 3 * (curHash - parent.charAt(i-1) * power) + parent.charAt(i + patternLen - 1);
+            }
+
+            if (patternHash == curHash) {
+                boolean match = true;
+                for (int j=0; j<patternLen; j++) {
+                    if (parent.charAt(j+i) != pattern.charAt(j)) {
+                        match = false;
+                        break;
+                    }
+                }
+                if (match)
+                    ans.add(i+1);
+            }
+        }
+        return ans;
     }
 
     static ArrayList<Integer> KMP(String parent, String pattern) {
