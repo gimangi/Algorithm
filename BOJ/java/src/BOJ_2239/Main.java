@@ -24,7 +24,7 @@ public class Main {
                 }
             }
         }
-        
+
         Position first = new Position(blanks.get(0).y, blanks.get(0).x, 0);
         first.cnt = -1;
         stack.push(first);
@@ -55,6 +55,8 @@ public class Main {
     static void clear(ArrayList<Position> blanks, int idx) {
         for (int i=idx; i<blanks.size(); i++) {
             Position pos = blanks.get(i);
+            if (map[pos.y][pos.x] == 0)
+                break;
             map[pos.y][pos.x] = 0;
         }
     }
