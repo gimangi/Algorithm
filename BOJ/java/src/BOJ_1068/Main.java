@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 public class Main {
 
@@ -15,16 +14,20 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
         tree = new Node[N];
-
-        StringTokenizer st = new StringTokenizer(br.readLine());
+        // init
         for (int i = 0; i < N; i++) {
+            tree[i] = new Node();
+        }
+
+        String[] inputs = br.readLine().split(" ");
+        for (int i = 0; i < N; i++) {
+            int parentNum = Integer.parseInt(inputs[i]);
             Node parent = null;
-            int parentNum = Integer.parseInt(st.nextToken());
             if (parentNum != -1) {
                 parent = tree[parentNum];
                 tree[parentNum].children.add(tree[i]);
             }
-            tree[i] = new Node(parent);
+            tree[i].parent = parent;
         }
 
         int delete = Integer.parseInt(br.readLine());
@@ -52,16 +55,19 @@ public class Main {
     }
 
     static class Node {
-        final Node parent;
+        Node parent;
         final List<Node> children = new ArrayList<>();
         boolean isDeleted = false;
 
-        public Node(Node parent) {
-            this.parent = parent;
-        }
-
         public boolean isLeaf() {
-            return children.isEmpty();
+            if (children.isEmpty())
+                return true;
+
+            for (Node child : children) {
+                if (!child.isDeleted)
+                    return false;
+            }
+            return true;
         }
 
     }
